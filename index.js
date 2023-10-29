@@ -7,11 +7,16 @@ const memeModalInner = document.getElementById('meme-modal-inner')
 const memeModal = document.getElementById('meme-modal')
 const memeModalCloseBtn = document.getElementById('meme-modal-close-btn')
 
+
 emotionRadios.addEventListener('change', highlightCheckedOption)
 
 memeModalCloseBtn.addEventListener('click', closeModal)
 
-getImageBtn.addEventListener('click', renderCat)
+getImageBtn.addEventListener('click', function(event) {
+    renderCat();
+    event.stopPropagation(); // stops the blooming of the event to the body
+});
+
 
 function highlightCheckedOption(e){
     const radios = document.getElementsByClassName('radio')
@@ -26,7 +31,15 @@ function closeModal(){
 }
 
 function renderCat(){
+    const catsArray = getMatchingCatsArray()
+    console.log(catsArray)
     const catObject = getSingleCatObject()
+    //creating the thumbnail container
+    const thumbnailContainer = document.createElement("div")
+    thumbnailContainer.style.display = "flex"
+    thumbnailContainer.style.flexWrap = "wrap"
+    thumbnailContainer.classList.add("thumbnail-container")
+
     memeModalInner.innerHTML =  `
         <img 
         class="cat-img" 
@@ -34,6 +47,20 @@ function renderCat(){
         alt="${catObject.alt}"
         >
         `
+    memeModalInner.appendChild(thumbnailContainer)
+    
+    // Filter the catsArray to exclude the cat object obtained from getSingleCatObject
+    const filteredCatsArray = catsArray.filter(cat => cat !== catObject);
+
+    filteredCatsArray.forEach(cat => {
+        let thumbnailImage = document.createElement("img");
+        thumbnailImage.classList.add("thumbnail-image");
+        thumbnailImage.src = `./images/${cat.image}`;
+        thumbnailImage.alt = cat.alt;
+        thumbnailContainer.appendChild(thumbnailImage);
+    });
+
+    //making the modal visible
     memeModal.style.display = 'flex'
 }
 
@@ -64,6 +91,7 @@ function getMatchingCatsArray(){
             }            
         })
         return matchingCatsArray 
+        
     }  
 }
 
@@ -102,3 +130,9 @@ renderEmotionsRadios(catsData)
 
 
 
+document.body.addEventListener('click', function(event) {
+    if (window.getComputedStyle(memeModal).display === "flex" && !memeModal.contains(event.target)) {
+        console.log("success");
+        memeModal.style.display = "none";
+    }
+});

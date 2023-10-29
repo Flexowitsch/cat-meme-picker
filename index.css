@@ -133,13 +133,18 @@ input[type="radio"]{
     border: 1px solid #67595e;
     border-radius: 5px;
     width: 420px;
-    height: 490px;
+    /* height: 490px; */
     background-color: #fff0ee;
 }
 
+#meme-modal-inner {
+    padding: 2rem;
+}
+
 .cat-img{
-    max-width: 340px;
-    max-height: 420px;
+    width: 100%;
+    height: auto;
+    ;
     border-radius: 5px;
 }
 
@@ -160,3 +165,15 @@ input[type="radio"]{
     background-color: #bd301d;
     border: 2px solid #bd301d;
 }
+
+.thumbnail-container {
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.thumbnail-container img {
+    flex-grow: 1;
+    max-width: 45%
+}
+
